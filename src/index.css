@@ -1,0 +1,437 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* ─── Type System ──────────────────────────────────────────── */
+  --font-heading: 'IBM Plex Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    'IBM Plex Sans', 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', 'Geist Mono', ui-monospace, monospace;
+
+  /* ─── Color Token Aliases ──────────────────────────────────── */
+  --color-sidebar-ring:               var(--sidebar-ring);
+  --color-sidebar-border:             var(--sidebar-border);
+  --color-sidebar-accent-foreground:  var(--sidebar-accent-foreground);
+  --color-sidebar-accent:             var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary:            var(--sidebar-primary);
+  --color-sidebar-foreground:         var(--sidebar-foreground);
+  --color-sidebar:                    var(--sidebar);
+
+  --color-ring:                var(--ring);
+  --color-input:               var(--input);
+  --color-border:              var(--border);
+  --color-destructive:         var(--destructive);
+  --color-accent-foreground:   var(--accent-foreground);
+  --color-accent:              var(--accent);
+  --color-muted-foreground:    var(--muted-foreground);
+  --color-muted:               var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary:           var(--secondary);
+  --color-primary-foreground:  var(--primary-foreground);
+  --color-primary:             var(--primary);
+  --color-popover-foreground:  var(--popover-foreground);
+  --color-popover:             var(--popover);
+  --color-card-foreground:     var(--card-foreground);
+  --color-card:                var(--card);
+  --color-foreground:          var(--foreground);
+  --color-background:          var(--background);
+
+  /* ─── Radius: Strict Industrial Edges ────────────────────── */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 1px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LIGHT MODE — "Sheet Metal + Blueprint"
+   Base: cool off-white (clean sheet metal)
+   Accent: Steel Teal (industrial control panels)
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* Neutrals */
+  --background:          #F0F2F4;    /* sheet metal off-white */
+  --foreground:          #1C2B35;    /* deep steel */
+  --card:                #FAFBFC;    /* clean white card */
+  --card-foreground:     #1C2B35;
+  --popover:             #FAFBFC;
+  --popover-foreground:  #1C2B35;
+
+  /* Brand: Steel Teal — industrial control panel */
+  --primary:             #2A8080;
+  --primary-foreground:  #F0F2F4;
+
+  /* Secondary: Cool metal grey */
+  --secondary:           #E5E9ED;
+  --secondary-foreground: #2E3D47;
+
+  /* Muted: Blueprint grey */
+  --muted:               #E5E9ED;
+  --muted-foreground:    #6B7B8A;    /* stamped-label chalk */
+
+  /* Accent: Light teal tint */
+  --accent:              #D6EAEA;
+  --accent-foreground:   #1C5F5F;
+
+  /* Destructive: Hard industrial red */
+  --destructive:         #C0392B;
+
+  /* Structure */
+  --border:              #CDD4DA;    /* crisp metal edge */
+  --input:               #CDD4DA;
+  --ring:                #2A8080;    /* teal focus ring */
+
+  /* Radius */
+  --radius: 2px;
+
+  /* Sidebar */
+  --sidebar:                    #1C2B35;   /* deep steel — dark sidebar on light bg */
+  --sidebar-foreground:         #B8C4CC;
+  --sidebar-primary:            #2A8080;
+  --sidebar-primary-foreground: #F0F2F4;
+  --sidebar-accent:             #243340;
+  --sidebar-accent-foreground:  #D0DCE4;
+  --sidebar-border:             #2E3D47;
+  --sidebar-ring:               #2A8080;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE — "Cast Iron + Teal Glow"
+   ═══════════════════════════════════════════════════════════════ */
+.dark {
+  --background:          #111820;   /* near-black steel */
+  --foreground:          #D8E2E8;
+  --card:                #16202A;
+  --card-foreground:     #D8E2E8;
+  --popover:             #16202A;
+  --popover-foreground:  #D8E2E8;
+
+  --primary:             #30A0A0;   /* slightly brighter teal in dark */
+  --primary-foreground:  #0A1318;
+
+  --secondary:           #1E2E3A;
+  --secondary-foreground: #9AB0BC;
+
+  --muted:               #1E2E3A;
+  --muted-foreground:    #6B8494;
+
+  --accent:              #1A3540;
+  --accent-foreground:   #A0C8CC;
+
+  --destructive:         #E05244;
+
+  --border:              #243340;
+  --input:               #243340;
+  --ring:                #30A0A0;
+
+  --sidebar:             #0D1820;
+  --sidebar-foreground:  #8FA8B4;
+  --sidebar-primary:     #30A0A0;
+  --sidebar-primary-foreground: #0A1318;
+  --sidebar-accent:      #142030;
+  --sidebar-accent-foreground: #C4D8E0;
+  --sidebar-border:      #1C2C38;
+  --sidebar-ring:        #30A0A0;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BASE LAYER
+   ═══════════════════════════════════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border outline-ring/40;
+    /* Tabular lining numerals — critical for technical readouts */
+    font-feature-settings: "tnum" on, "lnum" on;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-sans);
+    /* Blueprint dot-grid — subtle but characterful */
+    background-image: radial-gradient(circle, var(--color-border) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+
+  code, kbd, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SIGNATURE ELEMENT — HAZARD STRIPE
+   Critical-priority rows get physical hazard tape visual language.
+   4px left border with alternating amber/black diagonal stripes.
+   ═══════════════════════════════════════════════════════════════ */
+.hazard-stripe-row {
+  position: relative;
+}
+.hazard-stripe-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: repeating-linear-gradient(
+    -45deg,
+    #D97706,
+    #D97706 3px,
+    #1C2B35 3px,
+    #1C2B35 6px
+  );
+  flex-shrink: 0;
+}
+
+/* Priority left-bar variants (non-critical) */
+.priority-bar-high {
+  position: relative;
+}
+.priority-bar-high::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #D97706;
+}
+.priority-bar-medium::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #2A8080;
+}
+.priority-bar-low::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #1F7A4D;
+}
+.priority-bar-medium, .priority-bar-low {
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STAMPED INK BADGE
+   Physical ink-stamp visual — uppercase mono, hard border, slight
+   rotation for authenticity. Used on status + priority badges.
+   ═══════════════════════════════════════════════════════════════ */
+.stamp-effect {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  border-width: 1.5px;
+  border-style: solid;
+  border-radius: 1px;
+  padding: 1.5px 6px;
+  letter-spacing: 0.06em;
+  transform: rotate(-0.8deg);
+  box-shadow: 1px 1.5px 0px rgba(0, 0, 0, 0.12);
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  font-size: 10px;
+  line-height: 1.5;
+}
+/* Critical gets a steeper rotation — visually urgent */
+.stamp-effect-critical {
+  transform: rotate(-1.5deg);
+  border-width: 2px;
+  box-shadow: 2px 2px 0px rgba(192, 57, 43, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   NAMEPLATE TAG
+   QR card styled as a physical equipment nameplate.
+   Hard black border, corner registration marks (+ symbols),
+   ready to be cut out and laminated.
+   ═══════════════════════════════════════════════════════════════ */
+.nameplate-tag {
+  position: relative;
+  border: 2px solid var(--color-foreground);
+  background: var(--color-card);
+  border-radius: 0;
+}
+
+.nameplate-tag::before {
+  content: "+";
+  position: absolute;
+  top: 4px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted-foreground);
+  line-height: 1;
+  pointer-events: none;
+}
+.nameplate-tag::after {
+  content: "+";
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted-foreground);
+  line-height: 1;
+  pointer-events: none;
+}
+.nameplate-corner-bl {
+  position: absolute;
+  bottom: 4px;
+  left: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted-foreground);
+  line-height: 1;
+  pointer-events: none;
+}
+.nameplate-corner-br {
+  position: absolute;
+  bottom: 4px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-muted-foreground);
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SERVICE TICKET STEP
+   Numbered sections in maintenance forms and public report forms —
+   reads like a physical service/work order.
+   ═══════════════════════════════════════════════════════════════ */
+.service-ticket-step {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-top: 1px dashed var(--color-border);
+}
+.service-ticket-step:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.service-ticket-number {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   METRIC READOUT
+   Dashboard stat numbers styled as instrument gauge readouts.
+   Monospace, tabular numerals, no decorative fill.
+   ═══════════════════════════════════════════════════════════════ */
+.metric-readout-value {
+  font-family: var(--font-mono);
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-feature-settings: "tnum" on;
+}
+.metric-readout-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CARBON COPY TEAR-OFF
+   Dashed top/bottom lines mimicking a carbon-copy form perforations.
+   ═══════════════════════════════════════════════════════════════ */
+.service-tear-off {
+  background-image:
+    linear-gradient(90deg, transparent 50%, var(--color-border) 50%),
+    linear-gradient(90deg, transparent 50%, var(--color-border) 50%);
+  background-size: 8px 1px;
+  background-repeat: repeat-x;
+  background-position: top, bottom;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STATUS BANNER (Public Asset Page)
+   Full left-border status hero — bigger than a badge, smaller
+   than a full alert — keeps mobile hierarchy tight.
+   ═══════════════════════════════════════════════════════════════ */
+.status-banner-operational  { border-left: 4px solid #1F7A4D; }
+.status-banner-issue        { border-left: 4px solid #D97706; }
+.status-banner-inspection   { border-left: 4px solid #1D6A8A; }
+.status-banner-maintenance  { border-left: 4px solid #7B3FA0; }
+.status-banner-out-of-service { border-left: 4px solid #C0392B; }
+.status-banner-retired      { border-left: 4px solid #6B7B8A; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CUSTOM SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/25;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/45;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   FOCUS STATES — keep visible, styled to palette
+   ═══════════════════════════════════════════════════════════════ */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply ring-2 ring-primary ring-offset-1 outline-hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   TABLE ROW HOVER — industrial
+   ═══════════════════════════════════════════════════════════════ */
+.table-row-hover {
+  transition: background-color 100ms ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT OVERRIDES
+   ═══════════════════════════════════════════════════════════════ */
+@media print {
+  body {
+    background-image: none !important;
+    background-color: white !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

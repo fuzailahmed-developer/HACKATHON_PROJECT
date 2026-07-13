@@ -1,0 +1,70 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check if user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Helper: check user role from users collection
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuth() && getUserData().role == 'Admin';
+    }
+
+    function isTechnician() {
+      return isAuth() && getUserData().role == 'Technician';
+    }
+
+    function isEmployee() {
+      return isAuth() && getUserData().role == 'Employee';
+    }
+
+    // --- USERS ---
+    // Readable/writable only by the user themselves and Admins.
+    match /users/{userId} {
+      allow read: if isAuth() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAuth() && (request.auth.uid == userId || isAdmin());
+    }
+
+    // --- ASSETS ---
+    // Public read allowed (needed for public scanned page), write restricted to authenticated Admins.
+    match /assets/{assetId} {
+      allow read: if true;
+      allow create, update: if isAdmin();
+      allow delete: if false; // Retired assets remain in DB, never deleted
+    }
+
+    // --- ISSUES ---
+    // Auth create only (Employee/Admin/Tech must be logged in to report).
+    // Read restricted to the reporter (their own issues) plus Admin/Technician,
+    // except a reporter/guest can read a single issue document (allow get) for lookup.
+    match /issues/{issueId} {
+      allow create: if isAuth();
+      allow get: if true; // Keep public guest lookup of individual tickets so track/lookup works
+      allow list: if isAuth() && (isAdmin() || isTechnician() || (isEmployee() && resource.data.reportedBy == request.auth.uid));
+      allow update: if isAuth() && (isAdmin() || isTechnician());
+      allow delete: if false; // Issues are never deleted
+    }
+
+    // --- MAINTENANCE RECORDS ---
+    // Read/write restricted to authenticated Admin/Technician only. Never exposed publicly.
+    match /maintenanceRecords/{recordId} {
+      allow read, write: if isAuth() && (isAdmin() || isTechnician());
+    }
+
+    // --- ASSET HISTORY ---
+    // Public read allowed (frontend filters fields for safe subset).
+    // Create allowed if authenticated. No updates/deletes allowed ever.
+    match /assetHistory/{historyId} {
+      allow read: if true;
+      allow create: if isAuth();
+      allow update, delete: if false;
+    }
+  }
+}
