@@ -249,7 +249,7 @@ export function SignupPage() {
             </Link>
           </span>
           <span className="font-mono text-[9px] text-muted-foreground/50 mt-1 uppercase tracking-widest">
-            MaintainIQ · SMIT Track B
+            MaintainIQ 
           </span>
         </CardFooter>
       </Card>
@@ -258,3 +258,4 @@ export function SignupPage() {
 }
 
 export default SignupPage
+

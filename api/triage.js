@@ -7,6 +7,7 @@
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages"
 const MODEL_NAME = "claude-3-5-haiku-20241022" // Fast and accurate for classification
 
+
 export default async function handler(req, res) {
   // 1. Enable CORS
   res.setHeader("Access-Control-Allow-Credentials", "true")
@@ -29,7 +30,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: "Missing complaint description" })
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    
     if (!apiKey) {
       console.error("Missing ANTHROPIC_API_KEY environment variable")
       return res.status(500).json({ error: "AI service configuration error" })
@@ -102,7 +104,7 @@ Safety Constraint Rules:
           cleanedText = matches[1].trim()
         }
       }
-      
+
       const parsedData = JSON.parse(cleanedText)
       return res.status(200).json(parsedData)
     } catch (parseError) {
@@ -115,3 +117,4 @@ Safety Constraint Rules:
     return res.status(500).json({ error: "Internal server error" })
   }
 }
+

@@ -5,9 +5,6 @@ import { getStorage } from "firebase/storage"
 
 /**
  * Firebase configuration
- * 
- * IMPORTANT: Replace these values with your own Firebase project config.
- * Go to Firebase Console → Project Settings → General → Your apps → Web app
  */
 const firebaseConfig = {
   apiKey: "AIzaSyD8QWZjGHWzYTeE796Nljt-RIZIAPoiswE",
